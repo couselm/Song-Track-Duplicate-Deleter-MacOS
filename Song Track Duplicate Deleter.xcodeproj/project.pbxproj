@@ -34,15 +34,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		5CB06A852B4459E700F46DF2 /* Track Duplicate Deleter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Track Duplicate Deleter.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5CB06A852B4459E700F46DF2 /* Song Track Duplicate Deleter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Song Track Duplicate Deleter.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5CB06A882B4459E700F46DF2 /* Track_Duplicate_DeleterApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Track_Duplicate_DeleterApp.swift; sourceTree = "<group>"; };
 		5CB06A8A2B4459E700F46DF2 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		5CB06A8C2B4459E800F46DF2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5CB06A8F2B4459E800F46DF2 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		5CB06A912B4459E800F46DF2 /* Track_Duplicate_Deleter.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Track_Duplicate_Deleter.entitlements; sourceTree = "<group>"; };
-		5CB06A962B4459E800F46DF2 /* Track Duplicate DeleterTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Track Duplicate DeleterTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5CB06A962B4459E800F46DF2 /* Song Track Duplicate DeleterTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Song Track Duplicate DeleterTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5CB06A9A2B4459E800F46DF2 /* Track_Duplicate_DeleterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Track_Duplicate_DeleterTests.swift; sourceTree = "<group>"; };
-		5CB06AA02B4459E800F46DF2 /* Track Duplicate DeleterUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Track Duplicate DeleterUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5CB06AA02B4459E800F46DF2 /* Song Track Duplicate DeleterUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Song Track Duplicate DeleterUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5CB06AA42B4459E800F46DF2 /* Track_Duplicate_DeleterUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Track_Duplicate_DeleterUITests.swift; sourceTree = "<group>"; };
 		5CB06AA62B4459E800F46DF2 /* Track_Duplicate_DeleterUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Track_Duplicate_DeleterUITestsLaunchTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -85,9 +85,9 @@
 		5CB06A862B4459E700F46DF2 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				5CB06A852B4459E700F46DF2 /* Track Duplicate Deleter.app */,
-				5CB06A962B4459E800F46DF2 /* Track Duplicate DeleterTests.xctest */,
-				5CB06AA02B4459E800F46DF2 /* Track Duplicate DeleterUITests.xctest */,
+				5CB06A852B4459E700F46DF2 /* Song Track Duplicate Deleter.app */,
+				5CB06A962B4459E800F46DF2 /* Song Track Duplicate DeleterTests.xctest */,
+				5CB06AA02B4459E800F46DF2 /* Song Track Duplicate DeleterUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -132,9 +132,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		5CB06A842B4459E700F46DF2 /* Track Duplicate Deleter */ = {
+		5CB06A842B4459E700F46DF2 /* Song Track Duplicate Deleter */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 5CB06AAA2B4459E800F46DF2 /* Build configuration list for PBXNativeTarget "Track Duplicate Deleter" */;
+			buildConfigurationList = 5CB06AAA2B4459E800F46DF2 /* Build configuration list for PBXNativeTarget "Song Track Duplicate Deleter" */;
 			buildPhases = (
 				5CB06A812B4459E700F46DF2 /* Sources */,
 				5CB06A822B4459E700F46DF2 /* Frameworks */,
@@ -144,14 +144,14 @@
 			);
 			dependencies = (
 			);
-			name = "Track Duplicate Deleter";
+			name = "Song Track Duplicate Deleter";
 			productName = "Track Duplicate Deleter";
-			productReference = 5CB06A852B4459E700F46DF2 /* Track Duplicate Deleter.app */;
+			productReference = 5CB06A852B4459E700F46DF2 /* Song Track Duplicate Deleter.app */;
 			productType = "com.apple.product-type.application";
 		};
-		5CB06A952B4459E800F46DF2 /* Track Duplicate DeleterTests */ = {
+		5CB06A952B4459E800F46DF2 /* Song Track Duplicate DeleterTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 5CB06AAD2B4459E800F46DF2 /* Build configuration list for PBXNativeTarget "Track Duplicate DeleterTests" */;
+			buildConfigurationList = 5CB06AAD2B4459E800F46DF2 /* Build configuration list for PBXNativeTarget "Song Track Duplicate DeleterTests" */;
 			buildPhases = (
 				5CB06A922B4459E800F46DF2 /* Sources */,
 				5CB06A932B4459E800F46DF2 /* Frameworks */,
@@ -162,14 +162,14 @@
 			dependencies = (
 				5CB06A982B4459E800F46DF2 /* PBXTargetDependency */,
 			);
-			name = "Track Duplicate DeleterTests";
+			name = "Song Track Duplicate DeleterTests";
 			productName = "Track Duplicate DeleterTests";
-			productReference = 5CB06A962B4459E800F46DF2 /* Track Duplicate DeleterTests.xctest */;
+			productReference = 5CB06A962B4459E800F46DF2 /* Song Track Duplicate DeleterTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		5CB06A9F2B4459E800F46DF2 /* Track Duplicate DeleterUITests */ = {
+		5CB06A9F2B4459E800F46DF2 /* Song Track Duplicate DeleterUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 5CB06AB02B4459E800F46DF2 /* Build configuration list for PBXNativeTarget "Track Duplicate DeleterUITests" */;
+			buildConfigurationList = 5CB06AB02B4459E800F46DF2 /* Build configuration list for PBXNativeTarget "Song Track Duplicate DeleterUITests" */;
 			buildPhases = (
 				5CB06A9C2B4459E800F46DF2 /* Sources */,
 				5CB06A9D2B4459E800F46DF2 /* Frameworks */,
@@ -180,9 +180,9 @@
 			dependencies = (
 				5CB06AA22B4459E800F46DF2 /* PBXTargetDependency */,
 			);
-			name = "Track Duplicate DeleterUITests";
+			name = "Song Track Duplicate DeleterUITests";
 			productName = "Track Duplicate DeleterUITests";
-			productReference = 5CB06AA02B4459E800F46DF2 /* Track Duplicate DeleterUITests.xctest */;
+			productReference = 5CB06AA02B4459E800F46DF2 /* Song Track Duplicate DeleterUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -208,7 +208,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 5CB06A802B4459E700F46DF2 /* Build configuration list for PBXProject "Track Duplicate Deleter" */;
+			buildConfigurationList = 5CB06A802B4459E700F46DF2 /* Build configuration list for PBXProject "Song Track Duplicate Deleter" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -221,9 +221,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				5CB06A842B4459E700F46DF2 /* Track Duplicate Deleter */,
-				5CB06A952B4459E800F46DF2 /* Track Duplicate DeleterTests */,
-				5CB06A9F2B4459E800F46DF2 /* Track Duplicate DeleterUITests */,
+				5CB06A842B4459E700F46DF2 /* Song Track Duplicate Deleter */,
+				5CB06A952B4459E800F46DF2 /* Song Track Duplicate DeleterTests */,
+				5CB06A9F2B4459E800F46DF2 /* Song Track Duplicate DeleterUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -286,12 +286,12 @@
 /* Begin PBXTargetDependency section */
 		5CB06A982B4459E800F46DF2 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 5CB06A842B4459E700F46DF2 /* Track Duplicate Deleter */;
+			target = 5CB06A842B4459E700F46DF2 /* Song Track Duplicate Deleter */;
 			targetProxy = 5CB06A972B4459E800F46DF2 /* PBXContainerItemProxy */;
 		};
 		5CB06AA22B4459E800F46DF2 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 5CB06A842B4459E700F46DF2 /* Track Duplicate Deleter */;
+			target = 5CB06A842B4459E700F46DF2 /* Song Track Duplicate Deleter */;
 			targetProxy = 5CB06AA12B4459E800F46DF2 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -421,10 +421,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Track Duplicate Deleter/Track_Duplicate_Deleter.entitlements";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Track Duplicate Deleter/Preview Content\"";
+				DEVELOPMENT_TEAM = QQB33452MG;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Song Tracks Duplicate Deleter";
@@ -448,10 +450,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Track Duplicate Deleter/Track_Duplicate_Deleter.entitlements";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Track Duplicate Deleter/Preview Content\"";
+				DEVELOPMENT_TEAM = QQB33452MG;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Song Tracks Duplicate Deleter";
@@ -483,7 +487,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Track Duplicate Deleter.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Track Duplicate Deleter";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Song Track Duplicate Deleter.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Song Track Duplicate Deleter";
 			};
 			name = Debug;
 		};
@@ -501,7 +505,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Track Duplicate Deleter.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Track Duplicate Deleter";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Song Track Duplicate Deleter.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Song Track Duplicate Deleter";
 			};
 			name = Release;
 		};
@@ -540,7 +544,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		5CB06A802B4459E700F46DF2 /* Build configuration list for PBXProject "Track Duplicate Deleter" */ = {
+		5CB06A802B4459E700F46DF2 /* Build configuration list for PBXProject "Song Track Duplicate Deleter" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				5CB06AA82B4459E800F46DF2 /* Debug */,
@@ -549,7 +553,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		5CB06AAA2B4459E800F46DF2 /* Build configuration list for PBXNativeTarget "Track Duplicate Deleter" */ = {
+		5CB06AAA2B4459E800F46DF2 /* Build configuration list for PBXNativeTarget "Song Track Duplicate Deleter" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				5CB06AAB2B4459E800F46DF2 /* Debug */,
@@ -558,7 +562,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		5CB06AAD2B4459E800F46DF2 /* Build configuration list for PBXNativeTarget "Track Duplicate DeleterTests" */ = {
+		5CB06AAD2B4459E800F46DF2 /* Build configuration list for PBXNativeTarget "Song Track Duplicate DeleterTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				5CB06AAE2B4459E800F46DF2 /* Debug */,
@@ -567,7 +571,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		5CB06AB02B4459E800F46DF2 /* Build configuration list for PBXNativeTarget "Track Duplicate DeleterUITests" */ = {
+		5CB06AB02B4459E800F46DF2 /* Build configuration list for PBXNativeTarget "Song Track Duplicate DeleterUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				5CB06AB12B4459E800F46DF2 /* Debug */,
