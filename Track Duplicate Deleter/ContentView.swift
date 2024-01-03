@@ -2,10 +2,13 @@ import SwiftUI
 import AppKit
 import AVFoundation
 
-struct SongMetadata {
+struct SongMetadata:Identifiable {
+    let id = UUID()
+    let filename: String
     let title: String
     let artist: String
     let album: String
+    let length: String
 }
 
 struct ContentView: View {
@@ -14,53 +17,49 @@ struct ContentView: View {
     @State private var duplicates: [String] = []
     @State private var files: [String] = []
     @State private var songMetadataList: [SongMetadata] = []
-    
+    @State private var selection: Set<SongMetadata.ID> = []
+    @State private var sortOrder = [KeyPathComparator(\SongMetadata.title, order: .reverse)]
 
     var body: some View {
+        
         VStack {
-            Text("Song Duplicate Deleter")
-            TextField("Enter Music Directory Path:", text: $dirPath).padding()
-            Button("Browse") {
-                showFilePicker()
-            }
-            .padding()
-            Text("Track List:")
+            Text("Song Duplicate Deleter").bold().padding(.top)
             HStack {
-                Spacer()
-                Text("Title").bold()
-                Spacer()
-                Text("Artist").bold()
-                Spacer()
-                Text("Album").bold()
-                Spacer()
+                TextField("Enter Music Directory Path:", text: $dirPath).padding(.leading)
+                Button("Browse") {
+                    showFilePicker()
+                }
+                .padding(.trailing)
             }
-            List(songMetadataList, id: \.title) { songMetadata in
-                            HStack {
-                                Text(songMetadata.title)
-                                Spacer()
-                                Text(songMetadata.artist)
-                                Spacer()
-                                Text(songMetadata.album)
-                            }
-                        }
-                        .frame(maxHeight: 400)
-                        
-
-            Button("Find Duplicate Tracks") {
-                findDuplicates()
-            }
-            .padding()
             
-            Button("Delete Duplicates") {
-                deleteDuplicates();
-            }.padding()
-                .alert(isPresented: $deleteConfimed) {
-                Alert(
-                    title: Text("Deletion Complete"),
-                    message: Text("\(duplicates.count) Duplicate Tracks have been deleted."),
-                    dismissButton: .default(Text("OK"))
-                )
+            Text("Track List:").padding(.top)
+            
+            Table(songMetadataList, selection: $selection, sortOrder: $sortOrder) {
+                        TableColumn("File", value: \.filename)
+                        TableColumn("Title", value: \.title)
+                        TableColumn("Artist", value: \.artist)
+                        TableColumn("Album", value: \.album)
+                        TableColumn("Length", value: \.length)
+            }.onChange(of: sortOrder) { newOrder in
+                songMetadataList.sort(using: newOrder) }
+                    
+            HStack {
+                Button("Find Duplicate Tracks") {
+                    findDuplicates()
+                }.padding()
+                
+                Button("Delete Duplicates") {
+                    deleteDuplicates();
+                }.padding()
+                    .alert(isPresented: $deleteConfimed) {
+                    Alert(
+                        title: Text("Deletion Complete"),
+                        message: Text("\(duplicates.count) Duplicate Tracks have been deleted."),
+                        dismissButton: .default(Text("OK"))
+                    )
             }
+            
+            }.padding(.trailing)
         }
     }
     
@@ -84,24 +83,13 @@ struct ContentView: View {
         }
     }
     
-//    func updateFilesList() {
-//            do {
-//                let fileManager = FileManager.default
-//                let contents = try fileManager.contentsOfDirectory(atPath: dirPath)
-//                files = contents
-//                
-//            } catch {
-//                print("Error listing files: \(error.localizedDescription)")
-//            }
-//        }
-    
     func updateMetadataList() {
         do {
             let fileManager  = FileManager.default
             let folderContents = try fileManager.contentsOfDirectory(atPath: dirPath)
             for fileName in folderContents {
                 let filePath = URL(fileURLWithPath: dirPath + "/" + fileName)
-                let metadata = extractMetadata(from: filePath)
+                let metadata = extractMetadata(from: filePath, filename: fileName)
                 if let validMetadata = metadata {
                     songMetadataList.append(validMetadata)
                 }
@@ -113,13 +101,15 @@ struct ContentView: View {
         }
     }
         
-    func extractMetadata(from filePath: URL) -> SongMetadata? {
+    func extractMetadata(from filePath: URL, filename: String) -> SongMetadata? {
         do {
             let asset = AVAsset(url: filePath)
             let metadata = asset.metadata
             var title = ""
             var artist = ""
             var album = ""
+            var length = ""
+            let duration = getDuration(from: asset)
             
             for item in metadata {
                         if let commonKey = item.commonKey, let value = item.value as? String {
@@ -136,7 +126,7 @@ struct ContentView: View {
                             }
                         }
             }
-            return SongMetadata(title: title, artist: artist, album: album)
+            return SongMetadata(filename: filename, title: title, artist: artist, album: album, length: duration)
             
         }
         catch {
@@ -145,7 +135,15 @@ struct ContentView: View {
                 return nil
             }
         }
-        
+    
+    func getDuration(from asset:AVAsset) -> String {
+        let duration = asset.duration
+        let durationInSeconds = CMTimeGetSeconds(duration)
+        let minutes = Int(durationInSeconds / 60)
+                    let seconds = Int(durationInSeconds.truncatingRemainder(dividingBy: 60))
+                    
+                    return String(format: "%02d:%02d", minutes, seconds)
+    }
 
     func findDuplicates() {
         do {
