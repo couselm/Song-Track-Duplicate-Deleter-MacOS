@@ -87,8 +87,6 @@ struct ContentView: View {
                 // Create an alert with a title, message, and a button
                 Alert(title: Text(searching ? "Searching files. This may take a minute." : "Finished"), message: Text("Total files found: \(trackcount)"), dismissButton: .default(Text(searching ? "Continue in Background" : "Close")))
             }
-
-
         }
     }
     
@@ -183,6 +181,7 @@ struct ContentView: View {
 
             for item in metadata {
                 if let commonKey = item.commonKey, let value = item.value as? String {
+                    print(commonKey)
                     switch commonKey {
                     case .commonKeyTitle:
                         title = value
