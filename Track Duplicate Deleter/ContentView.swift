@@ -11,18 +11,23 @@ struct SongMetadata:Identifiable {
     let duration: String
     let format: String
     let size: String
+    let samplerate: String
     let bitrate: String
 }
 
 struct ContentView: View {
     @State private var dirPath: String = ""
     @State private var deleteConfimed: Bool = false
+    @State private var searchSubfolders = false
+    @State private var showAlert = false
+    @State private var songMetadataList: [SongMetadata] = []
+    @State private var selection: Set<SongMetadata.ID> = []
     @State private var duplicates: [String] = []
     @State private var files: [String] = []
     @State private var songFileExtensions = ["mp3", "wav", "flac", "w4a"]
-    @State private var songMetadataList: [SongMetadata] = []
-    @State private var selection: Set<SongMetadata.ID> = []
     @State private var sortOrder = [KeyPathComparator(\SongMetadata.title, order: .reverse)]
+    @State private var trackcount = 0
+    
 
     var body: some View {
         
@@ -35,10 +40,17 @@ struct ContentView: View {
                 Button("📁 Browse") {
                     showFilePicker()
                 }
+                Toggle("Search Subfolders", isOn: $searchSubfolders)
                 .padding(.trailing)
             }.padding(.bottom)
             
-            Text("Track List").padding( .leading).frame(maxWidth: .infinity, alignment: .leading)
+            HStack {
+                Text("Track List").padding( .leading).frame(maxWidth: .infinity, alignment: .leading)
+                Button("❌  Clear Track List") {
+                    songMetadataList = []
+                }.padding()
+            }
+            
             
             Table(songMetadataList, selection: $selection, sortOrder: $sortOrder) {
                         TableColumn("File", value: \.filename)
@@ -46,13 +58,17 @@ struct ContentView: View {
                         TableColumn("Artist", value: \.artist)
                         TableColumn("Album", value: \.album)
                         TableColumn("Duration", value: \.duration)
-                    TableColumn("Format", value: \.format)
+                        TableColumn("Format", value: \.format)
                         TableColumn("Size", value: \.size)
+                        TableColumn("Sample Rate", value: \.samplerate)
                         TableColumn("Bitrate", value: \.bitrate)
             }.onChange(of: sortOrder) { newOrder in
                 songMetadataList.sort(using: newOrder) }
+            Text("Tracks Found: \(trackcount)").padding( .leading).frame(maxWidth: .infinity, alignment: .leading)
+                
                     
             HStack {
+                
                 Button("🔎  Find Duplicate Tracks") {
                     findDuplicates()
                 }.padding()
@@ -92,28 +108,48 @@ struct ContentView: View {
         }
     }
     
-    func updateMetadataList() {
+    
+    func searchDirectory(atPath path: String) {
         do {
             let fileManager  = FileManager.default
-            let folderContents = try fileManager.contentsOfDirectory(atPath: dirPath)
+            let folderContents = try fileManager.contentsOfDirectory(atPath: path)
             for fileName in folderContents {
-                let filePath = URL(fileURLWithPath: dirPath + "/" + fileName)
+                let filePath = URL(fileURLWithPath: path + "/" + fileName)
                 
-//                Check is file is audio format
-                let fileExtension = filePath.pathExtension.lowercased()
+                // Check if the item is a directory or a file
+                var isDirectory: ObjCBool = false
+                fileManager.fileExists(atPath: filePath.path, isDirectory: &isDirectory)
                 
-                if songFileExtensions.contains(fileExtension) {
-                    let metadata = extractMetadata(from: filePath, filename: fileName)
-                    if let validMetadata = metadata {
-                        songMetadataList.append(validMetadata)
+                if isDirectory.boolValue {
+                    // If the item is a directory and the user wants to search subfolders, call the function recursively
+                    if searchSubfolders {
+                        searchDirectory(atPath: filePath.path)
+                    }
+                } else {
+                    // Check is file is audio format
+                    let fileExtension = filePath.pathExtension.lowercased()
+                    
+                    if songFileExtensions.contains(fileExtension) {
+                        let metadata = extractMetadata(from: filePath, filename: fileName)
+                        if let validMetadata = metadata {
+                            songMetadataList.append(validMetadata)
+                            trackcount += 1
+                        }
                     }
                 }
-                
             }
         }
         catch {
             print("Error listing files: \(error.localizedDescription)")
         }
+    }
+    
+    func updateMetadataList() {
+        // Clear the previous list
+        songMetadataList.removeAll()
+        
+        // Call the recursive function with the selected directory path
+        searchDirectory(atPath: dirPath)
     }
         
     func extractMetadata(from filePath: URL, filename: String) -> SongMetadata? {
@@ -126,11 +162,15 @@ struct ContentView: View {
             let formattedFileSize = "\(round(fileSize * 100) / 100.0) MB"
             let formattedDuration = formatMinSec(durationInSeconds: duration)
             let bitrate = getAudioBitrate(fileSizeMB: fileSize, durationSec: duration)
+            let samplerate = "\(getSampleRate(asset: asset)) Hz"
+            
             let format = filePath.pathExtension.lowercased()
 
             var title = ""
             var artist = ""
             var album = ""
+        
+            
 
             for item in metadata {
                 if let commonKey = item.commonKey, let value = item.value as? String {
@@ -147,7 +187,7 @@ struct ContentView: View {
                 }
             }
 
-            return SongMetadata(filename: filename, title: title, artist: artist, album: album, duration: formattedDuration, format: format, size: formattedFileSize , bitrate: bitrate)
+            return SongMetadata(filename: filename, title: title, artist: artist, album: album, duration: formattedDuration, format: format, size: formattedFileSize, samplerate: samplerate , bitrate: bitrate)
 
         } catch {
             print("Error extracting metadata: \(error.localizedDescription)")
@@ -177,7 +217,6 @@ struct ContentView: View {
     }
 
 
-
     
     func getDuration(from asset:AVAsset) -> Double {
         let duration = asset.duration
@@ -190,6 +229,23 @@ struct ContentView: View {
                     let seconds = Int(durationInSeconds.truncatingRemainder(dividingBy: 60))
                     
                     return String(format: "%02d:%02d", minutes, seconds)
+    }
+
+    func getSampleRate(asset: AVAsset) -> Float {
+        var frameRate: Float = 0
+        let tracks = asset.tracks
+        // Loop through the tracks
+        for track in tracks {
+            // Check if the track is an audio track
+            if track.mediaType == .audio {
+                // Get the frame rate of the track
+                frameRate = track.nominalFrameRate
+                // Return the frame rate
+                return frameRate
+            }
+        }
+        // Return zero if there are no audio tracks
+        return frameRate
     }
 
     
@@ -220,33 +276,6 @@ struct ContentView: View {
             }
             
         }
-
-
-//
-//
-//    func getAudioBitrate(filePath: URL) -> String {
-//        do {
-//            // Get the audio file size in bytes
-//            let audioFileData = try Data(contentsOf: filePath)
-//            let audioFileSizeBytes = UInt64(audioFileData.count)
-//            
-//            // Get the audio duration in seconds
-//            let asset = AVURLAsset(url: filePath)
-//            let durationSeconds = CMTimeGetSeconds(asset.duration)
-//            
-//            // Calculate the bitrate in bps
-//            let audioBitrateBps = Double(audioFileSizeBytes * 8) / durationSeconds
-//            
-//            // Convert bps to kbps and round to nearest integer
-//            let audioBitrateKbps = Int(audioBitrateBps / 1000)
-//            
-//            return "\(audioBitrateKbps) kbps"
-//        } catch {
-//            print("Error: \(error.localizedDescription)")
-//            return "Unknown"
-//        }
-//    }
-
 
     
 
