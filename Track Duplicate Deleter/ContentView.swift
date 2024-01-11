@@ -11,7 +11,6 @@ struct SongMetadata:Identifiable {
     let duration: String
     let format: String
     let size: String
-    let samplerate: String
     let bitrate: String
 }
 
@@ -20,6 +19,7 @@ struct ContentView: View {
     @State private var deleteConfimed: Bool = false
     @State private var searchSubfolders = false
     @State private var showAlert = false
+    @State private var searching = false
     @State private var songMetadataList: [SongMetadata] = []
     @State private var selection: Set<SongMetadata.ID> = []
     @State private var duplicates: [String] = []
@@ -54,13 +54,12 @@ struct ContentView: View {
             
             Table(songMetadataList, selection: $selection, sortOrder: $sortOrder) {
                         TableColumn("File", value: \.filename)
+                        TableColumn("Format", value: \.format)
                         TableColumn("Title", value: \.title)
                         TableColumn("Artist", value: \.artist)
                         TableColumn("Album", value: \.album)
                         TableColumn("Duration", value: \.duration)
-                        TableColumn("Format", value: \.format)
                         TableColumn("Size", value: \.size)
-                        TableColumn("Sample Rate", value: \.samplerate)
                         TableColumn("Bitrate", value: \.bitrate)
             }.onChange(of: sortOrder) { newOrder in
                 songMetadataList.sort(using: newOrder) }
@@ -84,7 +83,12 @@ struct ContentView: View {
                     )
             }
             
-            }.padding(.trailing)
+            }.padding(.trailing).alert(isPresented: $showAlert) {
+                // Create an alert with a title, message, and a button
+                Alert(title: Text(searching ? "Searching files. This may take a minute." : "Finished"), message: Text("Total files found: \(trackcount)"), dismissButton: .default(Text(searching ? "Continue in Background" : "Close")))
+            }
+
+
         }
     }
     
@@ -110,6 +114,7 @@ struct ContentView: View {
     
     
     func searchDirectory(atPath path: String) {
+        searching = true
         do {
             let fileManager  = FileManager.default
             let folderContents = try fileManager.contentsOfDirectory(atPath: path)
@@ -142,14 +147,19 @@ struct ContentView: View {
         catch {
             print("Error listing files: \(error.localizedDescription)")
         }
+        searching = false
     }
     
     func updateMetadataList() {
         // Clear the previous list
-        songMetadataList.removeAll()
+        songMetadataList = []
+        trackcount = 0
+        showAlert = true
         
-        // Call the recursive function with the selected directory path
-        searchDirectory(atPath: dirPath)
+        DispatchQueue.global().async {
+                searchDirectory(atPath: dirPath)
+            }
+        
     }
         
     func extractMetadata(from filePath: URL, filename: String) -> SongMetadata? {
@@ -162,7 +172,6 @@ struct ContentView: View {
             let formattedFileSize = "\(round(fileSize * 100) / 100.0) MB"
             let formattedDuration = formatMinSec(durationInSeconds: duration)
             let bitrate = getAudioBitrate(fileSizeMB: fileSize, durationSec: duration)
-            let samplerate = "\(getSampleRate(asset: asset)) Hz"
             
             let format = filePath.pathExtension.lowercased()
 
@@ -187,7 +196,7 @@ struct ContentView: View {
                 }
             }
 
-            return SongMetadata(filename: filename, title: title, artist: artist, album: album, duration: formattedDuration, format: format, size: formattedFileSize, samplerate: samplerate , bitrate: bitrate)
+            return SongMetadata(filename: filename, title: title, artist: artist, album: album, duration: formattedDuration, format: format, size: formattedFileSize , bitrate: bitrate)
 
         } catch {
             print("Error extracting metadata: \(error.localizedDescription)")
@@ -229,23 +238,6 @@ struct ContentView: View {
                     let seconds = Int(durationInSeconds.truncatingRemainder(dividingBy: 60))
                     
                     return String(format: "%02d:%02d", minutes, seconds)
-    }
-
-    func getSampleRate(asset: AVAsset) -> Float {
-        var frameRate: Float = 0
-        let tracks = asset.tracks
-        // Loop through the tracks
-        for track in tracks {
-            // Check if the track is an audio track
-            if track.mediaType == .audio {
-                // Get the frame rate of the track
-                frameRate = track.nominalFrameRate
-                // Return the frame rate
-                return frameRate
-            }
-        }
-        // Return zero if there are no audio tracks
-        return frameRate
     }
 
     
