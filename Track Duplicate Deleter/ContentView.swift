@@ -8,7 +8,8 @@ struct SongMetadata:Identifiable {
     let title: String
     let artist: String
     let album: String
-    let length: String
+    let duration: String
+    let format: String
     let size: String
     let bitrate: String
 }
@@ -44,7 +45,8 @@ struct ContentView: View {
                         TableColumn("Title", value: \.title)
                         TableColumn("Artist", value: \.artist)
                         TableColumn("Album", value: \.album)
-                        TableColumn("Length", value: \.length)
+                        TableColumn("Duration", value: \.duration)
+                    TableColumn("Format", value: \.format)
                         TableColumn("Size", value: \.size)
                         TableColumn("Bitrate", value: \.bitrate)
             }.onChange(of: sortOrder) { newOrder in
@@ -117,12 +119,14 @@ struct ContentView: View {
     func extractMetadata(from filePath: URL, filename: String) -> SongMetadata? {
         do {
             let asset = AVAsset(url: filePath)
+            let audioFile = try AVAudioFile(forReading: filePath)
             let metadata = asset.metadata
             let duration = getDuration(from: asset)
             let fileSize = calculateFileSize(forURL: filePath)
             let formattedFileSize = "\(round(fileSize * 100) / 100.0) MB"
             let formattedDuration = formatMinSec(durationInSeconds: duration)
             let bitrate = getAudioBitrate(fileSizeMB: fileSize, durationSec: duration)
+            let format = filePath.pathExtension.lowercased()
 
             var title = ""
             var artist = ""
@@ -143,7 +147,7 @@ struct ContentView: View {
                 }
             }
 
-            return SongMetadata(filename: filename, title: title, artist: artist, album: album, length: formattedDuration, size: formattedFileSize , bitrate: bitrate)
+            return SongMetadata(filename: filename, title: title, artist: artist, album: album, duration: formattedDuration, format: format, size: formattedFileSize , bitrate: bitrate)
 
         } catch {
             print("Error extracting metadata: \(error.localizedDescription)")
@@ -192,10 +196,23 @@ struct ContentView: View {
     func getAudioBitrate(fileSizeMB: Double, durationSec: Double) -> String {
             do {
                 // convert MB to kilobits
+                var kbpsFinal:Int
                 let kilobits = fileSizeMB * 8000
                 let kbps = kilobits / durationSec
-                let kbpsRounded = round(kbps * 1) / 1
-                return "\(kbpsRounded) kbps"
+                let kbpsRounded = Int(kbps)
+                switch kbpsRounded {
+                case 1...40: kbpsFinal = 32
+                case 41...70: kbpsFinal = 64
+                case 71...109: kbpsFinal = 96
+                case 110...150: kbpsFinal = 128
+                case 150...215: kbpsFinal = 192
+                case 216...270: kbpsFinal = 256
+                case 271...355: kbpsFinal = 320
+                    
+                default:
+                    kbpsFinal = kbpsRounded
+                }
+                return "\(kbpsFinal) kbps"
             }
             catch {
                 print("Error: \(error.localizedDescription)")
