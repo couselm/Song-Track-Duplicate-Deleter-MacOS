@@ -8,6 +8,7 @@ struct SongMetadata:Identifiable {
     let title: String
     let artist: String
     let album: String
+    let type: String
     let duration: String
     let format: String
     let size: String
@@ -21,10 +22,10 @@ struct ContentView: View {
     @State private var showAlert = false
     @State private var searching = false
     @State private var songMetadataList: [SongMetadata] = []
-    @State private var selection: Set<SongMetadata.ID> = []
     @State private var duplicates: [String] = []
     @State private var files: [String] = []
     @State private var songFileExtensions = ["mp3", "wav", "flac", "w4a"]
+    @State private var selection: Set<SongMetadata.ID> = []
     @State private var sortOrder = [KeyPathComparator(\SongMetadata.title, order: .reverse)]
     @State private var trackcount = 0
     
@@ -53,16 +54,18 @@ struct ContentView: View {
             
             
             Table(songMetadataList, selection: $selection, sortOrder: $sortOrder) {
-                        TableColumn("File", value: \.filename)
-                        TableColumn("Format", value: \.format)
-                        TableColumn("Title", value: \.title)
-                        TableColumn("Artist", value: \.artist)
-                        TableColumn("Album", value: \.album)
-                        TableColumn("Duration", value: \.duration)
-                        TableColumn("Size", value: \.size)
-                        TableColumn("Bitrate", value: \.bitrate)
-            }.onChange(of: sortOrder) { newOrder in
-                songMetadataList.sort(using: newOrder) }
+                                   TableColumn("File", value: \.filename)
+                                   TableColumn("Format", value: \.format)
+                                   TableColumn("Title", value: \.title)
+                                   TableColumn("Artist", value: \.artist)
+                                   TableColumn("Album", value: \.album)
+                                   TableColumn("Genre", value: \.type)
+                                   TableColumn("Duration", value: \.duration)
+                                   TableColumn("Size", value: \.size)
+                                   TableColumn("Bitrate", value: \.bitrate)
+                       }.onChange(of: sortOrder) { newOrder in
+                           songMetadataList.sort(using: newOrder) }
+            
             Text("Tracks Found: \(trackcount)").padding( .leading).frame(maxWidth: .infinity, alignment: .leading)
                 
                     
@@ -176,6 +179,7 @@ struct ContentView: View {
             var title = ""
             var artist = ""
             var album = ""
+            var type = ""
         
             
 
@@ -189,13 +193,15 @@ struct ContentView: View {
                         artist = value
                     case .commonKeyAlbumName:
                         album = value
+                    case .commonKeyType:
+                        type = value
                     default:
                         break
                     }
                 }
             }
 
-            return SongMetadata(filename: filename, title: title, artist: artist, album: album, duration: formattedDuration, format: format, size: formattedFileSize , bitrate: bitrate)
+            return SongMetadata(filename: filename, title: title, artist: artist, album: album, type: type, duration: formattedDuration, format: format, size: formattedFileSize , bitrate: bitrate)
 
         } catch {
             print("Error extracting metadata: \(error.localizedDescription)")
@@ -243,16 +249,16 @@ struct ContentView: View {
     func getAudioBitrate(fileSizeMB: Double, durationSec: Double) -> String {
             do {
                 // convert MB to kilobits
-                var kbpsFinal:Int
+                var kbpsFinal:Int = 0
                 let kilobits = fileSizeMB * 8000
                 let kbps = kilobits / durationSec
                 let kbpsRounded = Int(kbps)
                 switch kbpsRounded {
-                case 1...40: kbpsFinal = 32
-                case 41...70: kbpsFinal = 64
-                case 71...109: kbpsFinal = 96
+                case 1...45: kbpsFinal = 32
+                case 46...75: kbpsFinal = 64
+                case 76...109: kbpsFinal = 96
                 case 110...150: kbpsFinal = 128
-                case 150...215: kbpsFinal = 192
+                case 151...215: kbpsFinal = 192
                 case 216...270: kbpsFinal = 256
                 case 271...355: kbpsFinal = 320
                     
